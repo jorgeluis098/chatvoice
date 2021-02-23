@@ -1,0 +1,65 @@
+settings:
+    name: Wattson
+regex:
+    name:
+        - '(\S+)$'
+    answerNo: 
+        - '([nN][oO])'
+    answerYes: 
+        - '([Ss]+[IiÍí]+)?([,]?[ ]?)+(([Ee][Ss][Tt][AaÁá])?([,]?[ ]?)+([Mm][Uu][Yy])?([,]?[ ]?)+([Bb][Ii][Ee][Nn])([,]?[ ]?)+)?(([Ee][Ss][Tt][Oo][Yy])?([,]?[ ]?)+([Dd][Ee])([,]?[ ]?)+([Aa][Cc][Uu][Ee][Rr][Dd][Oo])([,]?[ ]?)+)?((([Vv][Aa][Ll]?[Ee]?)?)([,]?[ ]?)+)?(([Cc][Ll][Aa][Rr][Oo])([,]?[ ]?)+([Qq][Uu][Ee])?([,]?[ ]?)+)?(([Pp][Oo][Rr])([,]?[ ]?)+([Ss][Uu][Pp][Uu][Ee][Ss][Tt][Oo])([,]?[ ]?)+([Qq][Uu][Ee])?([,]?[ ]?)+)?([Ee][Nn]([,]?[ ]?)+([Ee][Ff][Ee][Cc][Tt][Oo])([,]?[ ]?)+)?(([Aa][Ff][Ii][Rr][Mm][Aa][Tt][Ii][Vv][Oo])([,]?[ ]?)+)?'
+    age:
+        - '[0-9]?[0-9]'
+    activity:
+        - '(([Ee]?[Ss]?[Tt][Uu][Dd][Ii])([Oo]?([Aa][Nn][Dd][Oo])?)(.*[Yy].*)+?([Tt][Rr][Aa]?[Bb][Aa]?[Jj])([Oo]?([Aa]?[Nn]?[Dd][Oo])?))|([Aa][Mm][Bb][AaOo][Ss])'
+    where:
+        - '[Ee][Nn](.*)'
+    like:
+        - '([Mm][Ee] ([Aa][Gg][Rr][Aa][Dd][Aa])?([Gg][Uu][Ss][Tt][Aa])?)(.*)'
+slots:
+    - name
+    - intro
+    - age
+    - activity
+    - where
+    - like
+strategies:
+    name:
+        - say "Hola, soy Wattson y seré tu asistente personal, primero me gustaría saber tu nombre."
+        - input name | regex name
+        - if name == "UNK" then solve name
+        - remember name
+    intro:
+        - say 'Es un placer conocerte {} te doy la bienvenida, a partir de hoy me dedicaré a escuchar todo lo que me quieras contar, ¿Quieres saber qué puedo hacer?'.format(name)
+        - input intro | regex answerYes
+        - if intro != "UNK" then solve help
+        - if intro == "UNK" then say "Si deseas saberlo después podrás preguntarme"
+        - remember intro
+    age:
+        - say '{}, ¿cuántos años tienes?'.format(name)
+        - input age | regex age
+        - if age == "UNK" then solve age
+        - remember age
+    activity:
+        - say 'Dime {}, ¿estudias o trabajas?'.format(name)
+        - input activity | regex activity
+        - if activity == "UNK" then solve activity
+        - remember activity
+    where:
+        - say "¿Ya veo, en dónde estudias/trabajas?"
+        - input where | regex where
+        - if where == "UNK" then solve where
+        - remember where
+    like:
+        - say "¿Qué es lo que más te agrada de dicha actividad?"
+        - input like | regex like
+        - if like == "UNK" then solve like
+        - remember like
+    rewrite:
+        - set_slot name activity
+        - remember name
+    help:
+        - say "Puedes contarme lo que tú quieras y yo te puedo escuchar\n*Puedo contarte chistes\n*Darte información\n*Ayudarte a elegir\n*Recordarte eventos\n*Entre otras cosas.."
+    bye: 
+        - say "Todo está al día, hasta pronto {}".format(name)
+script:
+    - loop_slots

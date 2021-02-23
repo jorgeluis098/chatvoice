@@ -1,0 +1,38 @@
+settings:
+    name: Wattson
+regex:
+    name:
+        - '(\S+)$'
+    answerNo: 
+        - '([nN][oO])'
+    answerYes: 
+        - '([sS][iI])'
+    age:
+        - '\d{1,2}'
+slots:
+    - name
+    - age
+strategies:
+    name:
+        - say "Hola, soy Wattson tu asistente personal es un placer conocerte, me gustaría saber tu nombre."
+        - input name | regex name
+        - remember name
+        - say '¿Tu nombre es {}?'.format(name)
+        - input answer | regex answerNo
+        - say "{}".format(answer) 
+        - if answer != "UNK" then solve name
+        - say "{}, me gusta tu nombre, te doy la bienvenida, a partir de hoy me dedicaré a escuchar todo lo que me quieras contar, ¿Quieres saber qué puedo hacer?".format(name) 
+        - input answer | regex answerYes
+        - if answer != "UNK" then solve help
+        - say "{}".format(answer)
+    age:
+        - say "¿Qué edad tienes {}?".format(name)
+        - input age | regex age
+        - remember age
+    hello: 
+        - say "Hola {} de {} años".format(name, age)
+    help: 
+        - say "Puedes contarme tus problemas y yo te puedo escuchar, puedo contarte chistes, darte información, ayudarte a elegir, recordarte eventos, entre otras cosas."
+script:
+    - loop_slots
+    - solve hello
