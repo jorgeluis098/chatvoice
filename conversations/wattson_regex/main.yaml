@@ -4,11 +4,13 @@ regex:
     name:
         - '(\S+)$'
     answerNo: 
-        - '([nN][oO])'
+        - '([nN][oO])$'
     answerYes: 
-        - '([sS][iI])'
+        - '([sS][iI])$'
     age:
         - '\d{1,2}'
+    study: 
+        - '(estudio)(\s(\S+))+'
 slots:
     - name
 strategies:
@@ -34,9 +36,25 @@ strategies:
         - say "¿Qué edad tienes {}?".format(name)
         - input age | regex age
         - remember age
-        - solve grade
-    grade: 
-        - say "¿estudias o trabajas?"
+        - solve study
+    study:
+        - say "¿Estudias?"
+        - input study | regex answerNo        
+        - remember study
+        - if study != "UNK" then solve ask_work 
+        - if study == "UNK" then say "Genial, ¿Qué estas estudiando?"
+        - input study 
+        - remember study 
+        - solve ask_work
+    ask_work : 
+        - say "¿Trabajas?"
+        - input ask_work | regex answerNo
+        - remember ask_work
+        - if ask_work == "UNK" then solve work
+    work:
+        - say "Que bien, ¿De que trabajas?" 
+        - input work
+        - remember work
     hello: 
         - say "Hola {}".format(name)
     help: 
