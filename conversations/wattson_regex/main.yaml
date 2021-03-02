@@ -13,8 +13,6 @@ regex:
         - '([sS][iI])$'
     age:
         - '\d{1,2}'
-    study: 
-        - '(estudio)(\s(\S+))+'
 slots:
     - name
 strategies:

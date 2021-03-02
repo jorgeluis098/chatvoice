@@ -10,5 +10,3 @@ def time(*args):
         return 'set_slot {0} "{1}"'.format(var,"Buenas tardes, ¿Como va tu dia?")
     else:
         return 'set_slot {0} "{1}"'.format(var,"Buenas noches ¿Como estuvo tu dia?") 
-
-
