@@ -1,12 +1,16 @@
 settings:
     name: Wattson
+
+conversations:
+    - 'greetings.yaml'
+
 regex:
     name:
         - '(\S+)$'
     answerNo: 
-        - '([nN][oO])'
+        - '([nN][oO])$'
     answerYes: 
-        - '([sS][iI])'
+        - '([sS][iI])$'
     age:
         - '\d{1,2}'
 slots:
@@ -34,14 +38,31 @@ strategies:
         - say "¿Qué edad tienes {}?".format(name)
         - input age | regex age
         - remember age
-        - solve grade
-    grade: 
-        - say "¿estudias o trabajas?"
-    hello: 
-        - say "Hola {}".format(name)
+        - solve study
+    study:
+        - say "¿Estudias?"
+        - input study | regex answerNo        
+        - remember study
+        - if study != "UNK" then solve ask_work 
+        - if study == "UNK" then say "Genial, ¿Qué estas estudiando?"
+        - input study 
+        - remember study 
+        - solve ask_work
+    ask_work : 
+        - say "¿Trabajas?"
+        - input ask_work | regex answerNo
+        - remember ask_work
+        - if ask_work == "UNK" then solve work
+    work:
+        - say "Que bien, ¿De que trabajas?" 
+        - input work
+        - remember work
+    # hello: 
+        # - say "Hola {}".format(name)
     help: 
         - say "Puedes contarme tus problemas y yo te puedo escuchar, puedo contarte chistes, darte información, ayudarte a elegir, recordarte eventos, entre otras cosas."
 script:
     - loop_slots
     - if configuration == "UNK" then solve configuration
-    - solve hello
+    - solve greetings
+    - say greeting

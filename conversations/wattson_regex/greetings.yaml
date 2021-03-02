@@ -1,0 +1,5 @@
+plugins:
+    - greeting_time
+
+script:
+    - greeting_time.time('greeting')
