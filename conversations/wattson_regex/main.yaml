@@ -1,5 +1,9 @@
 settings:
     name: Wattson
+
+conversations:
+    - 'greetings.yaml'
+
 regex:
     name:
         - '(\S+)$'
@@ -55,11 +59,12 @@ strategies:
         - say "Que bien, ¿De que trabajas?" 
         - input work
         - remember work
-    hello: 
-        - say "Hola {}".format(name)
+    # hello: 
+        # - say "Hola {}".format(name)
     help: 
         - say "Puedes contarme tus problemas y yo te puedo escuchar, puedo contarte chistes, darte información, ayudarte a elegir, recordarte eventos, entre otras cosas."
 script:
     - loop_slots
     - if configuration == "UNK" then solve configuration
-    - solve hello
+    - solve greetings
+    - say greeting
